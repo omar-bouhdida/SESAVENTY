@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+:root {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+.home-container {
+  background-color: #03468B;
+  color: white;
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+/* Main Section */
+.home-main {
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.home-main h1 {
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  max-width: 40rem;
+  margin: 0 auto;
+  text-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
+}
+
+.home-main p {
+  margin-top: 0.75rem;
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  max-width: 24rem;
+  margin: 0.75rem auto 0;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.cta-btn {
+  margin-top: 1.5rem;
+  background: white;
+  color: #03468B;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.75rem 2rem;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+  background: #f1f1f1;
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
+}
+
+/* Image Gallery */
+.image-gallery {
+  max-width: 75rem;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.image-gallery img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
+}
+
+/* Special Hover Effect */
+.image-gallery img:hover {
+  transform: scale(1.05) rotate(-1deg);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  filter: brightness(1.1);
+}
+
+/* Stats Section */
+.stats-section {
+  background-color: #00468B;
+  padding: 4rem 1.5rem;
+  max-width: 75rem;
+  margin: 0 auto;
+  text-align: center;
+  border-radius: 1.5rem;
+}
+
+.stats-title {
+  color: white;
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.2;
+  margin-bottom: 3rem;
+}
+
+.stats-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .stats-cards {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.stats-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stats-images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stats-images img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.stats-count {
+  color: #00468B;
+  font-weight: 800;
+  font-size: 1.75rem;
+}
+
+.customers-section {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 4rem;
+  text-align: center;
+}
+
+.customers-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.customers-description {
+  font-size: 1rem;
+  max-width: 56rem;
+  margin: 0 auto 4rem;
+}
+
+/* Slider styles */
+.slider-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.slider-track {
+  display: flex;
+  width: calc(7 * 9rem * 2); /* 7 logos * 9rem width each * 2 for duplication */
+  animation: slide 20s linear infinite;
+}
+
+.logo-wrapper {
+  flex: 0 0 9rem;
+  height: 9rem;
+  border-radius: 9999px;
+  border: 1px solid #e0e7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  margin-right: 1.5rem;
+}
+
+.slider-track > .logo-wrapper:last-child {
+  margin-right: 0;
+}
+
+.logo-img {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Animation */
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-7 * 9rem - 7 * 1.5rem)); /* width + margin of 7 logos */
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .customers-section {
+    padding: 1.5rem 1rem 3rem;
+  }
+  
+  .customers-title {
+    font-size: 1.875rem;
+  }
+  
+  .customers-description {
+    margin-bottom: 3rem;
+  }
+  
+  .logo-wrapper {
+    flex: 0 0 7rem;
+    height: 7rem;
+    margin-right: 1rem;
+  }
+  
+  .slider-track {
+    width: calc(7 * 7rem * 2);
+    animation: slide 15s linear infinite;
+  }
+  
+  @keyframes slide {
+    100% {
+      transform: translateX(calc(-7 * 7rem - 7 * 1rem));
+    }
+  }
+}
