@@ -16,6 +16,11 @@ export const email = (value) => {
   return '';
 };
 
+export const validateEmail = (email) => {
+  const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  return regex.test(email);
+};
+
 export const password = (value) => {
   if (!value) return '';
   if (value.length < 8) {
