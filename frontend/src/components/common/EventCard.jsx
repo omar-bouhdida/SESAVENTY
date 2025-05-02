@@ -20,10 +20,12 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useAnimation } from '../../hooks/useAnimation';
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, index = 0 }) => {
   const navigate = useNavigate();
   const eventDate = new Date(event.dateDebut);
+  const cardRef = useAnimation('fade-in slide-up', index * 0.1);
 
   return (
     <Card
@@ -41,6 +43,7 @@ const EventCard = ({ event }) => {
         borderRadius: 2,
         overflow: 'hidden',
       }}
+      ref={cardRef}
     >
       <Box sx={{ position: 'relative' }}>
         {event.image ? (
@@ -198,35 +201,6 @@ const EventCard = ({ event }) => {
 
           <Box 
             display="flex" 
-            alignItems="center"
-            sx={{
-              bgcolor: 'action.hover',
-              px: 1.5,
-              py: 0.5,
-              borderRadius: 2,
-            }}
-          >
-            <GroupIcon
-              fontSize="small"
-              sx={{ mr: 1, color: 'text.secondary' }}
-            />
-            <Typography variant="body2" color="text.secondary" fontWeight="medium">
-              {event.nombreParticipants} / {event.capaciteMax || '∞'}
-            </Typography>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            mb: 3,
-          }}
-        >
-          {event.club && (
-            <Box 
-              display="flex" 
               alignItems="center"
               sx={{
                 bgcolor: 'action.hover',
@@ -235,44 +209,74 @@ const EventCard = ({ event }) => {
                 borderRadius: 2,
               }}
             >
-              <Avatar
-                src={event.club.logo}
-                alt={event.club.nom}
-                sx={{ 
-                  width: 24, 
-                  height: 24, 
-                  mr: 1,
-                  border: '2px solid white',
-                }}
+              <GroupIcon
+                fontSize="small"
+                sx={{ mr: 1, color: 'text.secondary' }}
               />
               <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                {event.club.nom}
+                {event.nombreParticipants} / {event.capaciteMax || '∞'}
               </Typography>
             </Box>
-          )}
-        </Box>
+          </Box>
 
-        <Button
-          fullWidth
-          variant="contained"
-          size="large"
-          endIcon={<ArrowForwardIcon />}
-          onClick={() => navigate(`/events/${event.id}`)}
-          sx={{
-            borderRadius: 2,
-            py: 1,
-            transition: 'all 0.2s',
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: (theme) => theme.shadows[4],
-            }
-          }}
-        >
-          Voir les détails
-        </Button>
-      </CardContent>
-    </Card>
-  );
-};
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mb: 3,
+            }}
+          >
+            {event.club && (
+              <Box 
+                display="flex" 
+                alignItems="center"
+                sx={{
+                  bgcolor: 'action.hover',
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: 2,
+                }}
+              >
+                <Avatar
+                  src={event.club.logo}
+                  alt={event.club.nom}
+                  sx={{ 
+                    width: 24, 
+                    height: 24, 
+                    mr: 1,
+                    border: '2px solid white',
+                  }}
+                />
+                <Typography variant="body2" color="text.secondary" fontWeight="medium">
+                  {event.club.nom}
+                </Typography>
+              </Box>
+            )}
+          </Box>
 
-export default EventCard;
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            endIcon={<ArrowForwardIcon />}
+            onClick={() => navigate(`/events/${event.id}`)}
+            sx={{
+              borderRadius: 2,
+              py: 1,
+              transition: 'all 0.2s',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: (theme) => theme.shadows[4],
+              }
+            }}
+          >
+            Voir les détails
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  export default EventCard;
+  

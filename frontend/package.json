@@ -24,13 +24,25 @@
     "react-router-dom": "^6.19.0"
   },
   "devDependencies": {
+    "@radix-ui/react-dialog": "^1.1.11",
+    "@radix-ui/react-slot": "^1.2.0",
+    "@tailwindcss/forms": "^0.5.10",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.21",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "eslint": "^8.53.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
     "globals": "^13.23.0",
+    "gsap": "^3.13.0",
+    "lucide-react": "^0.503.0",
+    "postcss": "^8.5.3",
+    "shadcn-ui": "^0.9.5",
+    "tailwind-merge": "^3.2.0",
+    "tailwindcss": "^4.1.5",
     "vite": "^4.5.0"
   }
 }

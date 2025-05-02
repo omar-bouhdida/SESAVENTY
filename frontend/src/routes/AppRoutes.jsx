@@ -15,17 +15,15 @@ import EventsView from '../pages/membre/EventsView';
 import Clubs from '../pages/etudiant/Clubs';
 import CreateClubRequest from '../pages/etudiant/CreateClubRequest';
 import MainLayout from '../layouts/MainLayout';
+import AuthLayout from '../layouts/AuthLayout';
 import { withProtectedRoute } from './ProtectedRoute';
 import { withRoleBasedRoute } from './RoleBasedRoute';
 
 const AppRoutes = () => [
+  // Auth routes with AuthLayout
   {
-    element: <MainLayout><Outlet /></MainLayout>,
+    element: <AuthLayout><Outlet /></AuthLayout>,
     children: [
-      {
-        path: '/',
-        element: <Home />
-      },
       {
         path: '/login',
         element: <Login />
@@ -33,6 +31,16 @@ const AppRoutes = () => [
       {
         path: '/register',
         element: <Register />
+      }
+    ]
+  },
+  // Main application routes with MainLayout
+  {
+    element: <MainLayout><Outlet /></MainLayout>,
+    children: [
+      {
+        path: '/',
+        element: <Home />
       },
       {
         path: '/unauthorized',
