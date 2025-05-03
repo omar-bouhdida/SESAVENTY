@@ -8,15 +8,14 @@ import {
   Box,
   Chip,
   Avatar,
-  Paper,
 } from '@mui/material';
 import {
-  Event as EventIcon,
-  LocationOn,
-  Group as GroupIcon,
-  ArrowForward as ArrowForwardIcon,
-  AccessTime as AccessTimeIcon,
-} from '@mui/icons-material';
+  Calendar as EventIcon,
+  MapPin as LocationIcon,
+  Users as GroupIcon,
+  ArrowRight as ArrowRightIcon,
+  Clock as ClockIcon,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -29,254 +28,170 @@ const EventCard = ({ event, index = 0 }) => {
 
   return (
     <Card
-      component={Paper}
-      elevation={1}
+      ref={cardRef}
       sx={{
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        transition: 'all 0.3s ease-in-out',
+        borderRadius: 3,
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         '&:hover': {
-          transform: 'translateY(-4px)',
+          transform: 'translateY(-8px)',
           boxShadow: (theme) => theme.shadows[8],
+          '& .arrow-icon': {
+            transform: 'translateX(4px)',
+          }
         },
-        borderRadius: 2,
-        overflow: 'hidden',
       }}
-      ref={cardRef}
     >
-      <Box sx={{ position: 'relative' }}>
-        {event.image ? (
-          <Box sx={{ position: 'relative', paddingTop: '56.25%' }}>
-            <CardMedia
-              component="img"
-              image={event.image}
-              alt={event.titre}
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                transition: 'transform 0.3s ease-in-out',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                },
-              }}
-            />
-          </Box>
-        ) : (
-          <Box
-            sx={{
-              paddingTop: '56.25%',
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: (theme) => `linear-gradient(45deg, ${theme.palette.secondary.main} 30%, ${theme.palette.secondary.light} 90%)`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <EventIcon 
-                sx={{ 
-                  fontSize: 80, 
-                  color: 'white',
-                  opacity: 0.8,
-                }} 
-              />
-            </Box>
-          </Box>
-        )}
-        
-        {/* Date chip overlay */}
-        <Chip
-          icon={<AccessTimeIcon />}
-          label={format(eventDate, "d MMM yyyy 'à' HH:mm", { locale: fr })}
+      <Box sx={{ position: 'relative', paddingTop: '56.25%' }}>
+        <CardMedia
+          component="img"
+          image={event.image || '/default-event-cover.jpg'}
+          alt={event.titre}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <Box
           sx={{
             position: 'absolute',
             top: 16,
             right: 16,
-            bgcolor: 'white',
-            color: 'primary.main',
-            fontWeight: 500,
-            boxShadow: 2,
-            '& .MuiChip-icon': {
-              color: 'primary.main',
-            },
+            display: 'flex',
+            gap: 1,
           }}
-        />
-      </Box>
-
-      <CardContent sx={{ flexGrow: 1, p: 3 }}>
-        <Box mb={2}>
-          <Typography 
-            variant="h6" 
-            gutterBottom 
-            sx={{ 
-              fontWeight: 'bold',
-              display: '-webkit-box',
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-            }}
-          >
-            {event.titre}
-          </Typography>
-          
-          <Box display="flex" gap={1} mb={2} flexWrap="wrap">
+        >
+          {event.estPublic && (
             <Chip
+              label="Public"
               size="small"
-              label={event.type}
               sx={{
-                bgcolor: 'secondary.light',
-                color: 'secondary.main',
+                bgcolor: 'success.light',
+                color: 'success.dark',
                 fontWeight: 500,
               }}
             />
-            {event.statut === 'OUVERT' && (
-              <Chip
-                size="small"
-                label="Inscriptions ouvertes"
-                sx={{
-                  bgcolor: 'success.light',
-                  color: 'success.dark',
-                  fontWeight: 500,
-                }}
-              />
-            )}
-          </Box>
-
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              mb: 3,
-              lineHeight: 1.6,
-            }}
-          >
-            {event.description}
-          </Typography>
+          )}
         </Box>
+      </Box>
+
+      <CardContent sx={{ flexGrow: 1, p: 3 }}>
+        <Typography variant="h6" gutterBottom fontWeight="bold">
+          {event.titre}
+        </Typography>
+
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            mb: 3,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            lineHeight: 1.6,
+          }}
+        >
+          {event.description}
+        </Typography>
 
         <Box
-          display="flex"
-          flexWrap="wrap"
-          gap={2}
-          mb={3}
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            mb: 3,
+          }}
         >
+          <Chip
+            icon={<EventIcon size={16} />}
+            label={format(eventDate, 'dd MMMM yyyy', { locale: fr })}
+            size="small"
+            sx={{
+              bgcolor: 'action.hover',
+              '& .MuiChip-icon': {
+                color: 'text.secondary',
+              },
+            }}
+          />
           {event.lieu && (
-            <Box 
-              display="flex" 
-              alignItems="center"
+            <Chip
+              icon={<LocationIcon size={16} />}
+              label={event.lieu}
+              size="small"
               sx={{
                 bgcolor: 'action.hover',
-                px: 1.5,
-                py: 0.5,
-                borderRadius: 2,
+                '& .MuiChip-icon': {
+                  color: 'text.secondary',
+                },
               }}
-            >
-              <LocationOn
-                fontSize="small"
-                sx={{ mr: 1, color: 'text.secondary' }}
-              />
-              <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                {event.lieu}
-              </Typography>
-            </Box>
+            />
           )}
+          <Chip
+            icon={<GroupIcon size={16} />}
+            label={`${event.nombreParticipants || 0}/${event.capaciteMax || '∞'}`}
+            size="small"
+            sx={{
+              bgcolor: 'action.hover',
+              '& .MuiChip-icon': {
+                color: 'text.secondary',
+              },
+            }}
+          />
+        </Box>
 
-          <Box 
-            display="flex" 
-              alignItems="center"
-              sx={{
-                bgcolor: 'action.hover',
-                px: 1.5,
-                py: 0.5,
-                borderRadius: 2,
-              }}
-            >
-              <GroupIcon
-                fontSize="small"
-                sx={{ mr: 1, color: 'text.secondary' }}
-              />
-              <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                {event.nombreParticipants} / {event.capaciteMax || '∞'}
-              </Typography>
-            </Box>
-          </Box>
-
+        {event.club && (
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
               mb: 3,
-            }}
-          >
-            {event.club && (
-              <Box 
-                display="flex" 
-                alignItems="center"
-                sx={{
-                  bgcolor: 'action.hover',
-                  px: 1.5,
-                  py: 0.5,
-                  borderRadius: 2,
-                }}
-              >
-                <Avatar
-                  src={event.club.logo}
-                  alt={event.club.nom}
-                  sx={{ 
-                    width: 24, 
-                    height: 24, 
-                    mr: 1,
-                    border: '2px solid white',
-                  }}
-                />
-                <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                  {event.club.nom}
-                </Typography>
-              </Box>
-            )}
-          </Box>
-
-          <Button
-            fullWidth
-            variant="contained"
-            size="large"
-            endIcon={<ArrowForwardIcon />}
-            onClick={() => navigate(`/events/${event.id}`)}
-            sx={{
+              p: 1.5,
               borderRadius: 2,
-              py: 1,
-              transition: 'all 0.2s',
-              '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: (theme) => theme.shadows[4],
-              }
+              bgcolor: 'action.hover',
             }}
           >
-            Voir les détails
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  };
+            <Avatar
+              src={event.club.logo}
+              alt={event.club.nom}
+              sx={{
+                width: 24,
+                height: 24,
+                mr: 1,
+                border: '2px solid white',
+              }}
+            />
+            <Typography variant="body2" color="text.secondary" fontWeight="medium">
+              {event.club.nom}
+            </Typography>
+          </Box>
+        )}
 
-  export default EventCard;
-  
+        <Button
+          fullWidth
+          variant="contained"
+          endIcon={<ArrowRightIcon className="arrow-icon" />}
+          onClick={() => navigate(`/events/${event.id}`)}
+          sx={{
+            py: 1.2,
+            borderRadius: 2,
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '& .arrow-icon': {
+              transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          }}
+        >
+          Voir les détails
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default EventCard;

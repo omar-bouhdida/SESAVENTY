@@ -70,6 +70,7 @@ const baseTheme = createTheme({
   },
   typography: {
     fontFamily: [
+      'Montserrat',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',

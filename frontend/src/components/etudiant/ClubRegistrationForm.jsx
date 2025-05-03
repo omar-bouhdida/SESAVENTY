@@ -8,7 +8,7 @@ import {
   Alert,
   Input as MuiInput,
 } from '@mui/material';
-import { CloudUpload as CloudUploadIcon } from '@mui/icons-material';
+import { UploadCloud } from 'lucide-react';
 import { FILE_UPLOAD } from '../../utils/constants';
 import { validateClubName, validateObjectifs, validateImageFile } from '../../utils/validators';
 import useForm from '../../hooks/useForm';
@@ -118,7 +118,7 @@ const ClubRegistrationForm = ({ onSubmit, isLoading }) => {
           <Button
             component="label"
             variant="outlined"
-            startIcon={<CloudUploadIcon />}
+            startIcon={<UploadCloud size={20} />}
             sx={{ mb: 2 }}
           >
             Télécharger le logo

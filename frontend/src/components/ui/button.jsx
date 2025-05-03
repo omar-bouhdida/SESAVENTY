@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva } from "class-variance-authority"
 import { useAnimation } from "../../hooks/useAnimation"
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
@@ -40,17 +40,16 @@ const Button = React.forwardRef(({
 }, ref) => {
   const animationRef = useAnimation('scale-in', animationDelay);
   const Comp = asChild ? Slot : "button"
-
-  const mergedClassName = `${buttonVariants({ variant, size })} ${className}`.trim()
-
+  
   return (
     <Comp
-      className={mergedClassName}
+      className={`${buttonVariants({ variant, size })} ${className}`.trim()}
       ref={animate ? animationRef : ref}
       {...props}
     />
   )
 })
+
 Button.displayName = "Button"
 
-export { Button, buttonVariants }
+export default Button

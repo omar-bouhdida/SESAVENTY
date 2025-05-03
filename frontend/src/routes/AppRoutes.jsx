@@ -18,6 +18,11 @@ import MainLayout from '../layouts/MainLayout';
 import AuthLayout from '../layouts/AuthLayout';
 import { withProtectedRoute } from './ProtectedRoute';
 import { withRoleBasedRoute } from './RoleBasedRoute';
+import FAQ from '../pages/shared/FAQ';
+import Contact from '../pages/shared/Contact';
+import PrivacyPolicy from '../pages/shared/legal/PrivacyPolicy';
+import TermsOfService from '../pages/shared/legal/TermsOfService';
+import LegalNotice from '../pages/shared/legal/LegalNotice';
 
 const AppRoutes = () => [
   // Auth routes with AuthLayout
@@ -45,6 +50,10 @@ const AppRoutes = () => [
       {
         path: '/unauthorized',
         element: <Unauthorized />
+      },
+      {
+        path: '/contact',
+        element: <Contact />
       },
       {
         path: '/responsable',
@@ -96,6 +105,22 @@ const AppRoutes = () => [
       {
         path: '/events',
         element: withProtectedRoute(withRoleBasedRoute(<EventsView />, ['MEMBRE']))
+      },
+      {
+        path: '/faq',
+        element: <FAQ />
+      },
+      {
+        path: '/privacy-policy',
+        element: <PrivacyPolicy />
+      },
+      {
+        path: '/terms-of-service',
+        element: <TermsOfService />
+      },
+      {
+        path: '/legal-notice',
+        element: <LegalNotice />
       },
       {
         path: '*',

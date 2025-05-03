@@ -1,37 +1,48 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef, useEffect } from 'react';
 
-export const useAnimation = (type = 'fade-in', delay = 0) => {
-  const elementRef = useRef(null);
+export const useAnimation = (animationType = 'fade-in', delay = 0) => {
+  const ref = useRef(null);
 
   useEffect(() => {
-    const element = elementRef.current;
-    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Add animation classes based on type
+          switch (animationType) {
+            case 'fade-in':
+              ref.current.style.animation = `fadeIn 0.6s ease-out ${delay}s forwards`;
+              break;
+            case 'slide-up':
+              ref.current.style.animation = `slideUp 0.6s ease-out ${delay}s forwards`;
+              break;
+            case 'slide-right':
+              ref.current.style.animation = `slideRight 0.6s ease-out ${delay}s forwards`;
+              break;
+            case 'scale-up':
+              ref.current.style.animation = `scaleUp 0.6s ease-out ${delay}s forwards`;
+              break;
+            default:
+              ref.current.style.animation = `fadeIn 0.6s ease-out ${delay}s forwards`;
+          }
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
 
-    // Set initial state
-    gsap.set(element, {
-      opacity: type.includes('fade') ? 0 : 1,
-      y: type.includes('slide-up') ? 50 : 0,
-      scale: type.includes('scale') ? 0 : 1,
-    });
+    if (ref.current) {
+      ref.current.style.opacity = '0';
+      observer.observe(ref.current);
+    }
 
-    // Create animation
-    const animation = gsap.to(element, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.6,
-      delay,
-      ease: 'power2.out',
-    });
-
-    // Cleanup
     return () => {
-      animation.kill();
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
     };
-  }, [type, delay]);
+  }, [animationType, delay]);
 
-  return elementRef;
+  return ref;
 };
 
 // Animation presets for use throughout the application

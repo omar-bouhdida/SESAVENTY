@@ -11,25 +11,28 @@ import {
   Avatar,
   Drawer,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
   Divider,
   useTheme,
   useMediaQuery,
   ListItemButton,
+  Badge,
+  Chip,
 } from '@mui/material';
+import logo from '../../assets/logo.png';
 import {
   Menu as MenuIcon,
   Home,
-  Group,
-  Event,
-  AddCircle,
-  Dashboard,
+  Users as ClubsIcon,
+  Calendar as EventsIcon,
+  PlusCircle as AddIcon,
+  LayoutDashboard as DashboardIcon,
   Settings,
-  Logout,
-  KeyboardArrowRight as KeyboardArrowRightIcon,
-} from '@mui/icons-material';
+  LogOut,
+  Bell as NotificationsIcon,
+  User as AccountIcon,
+} from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { formatUserName } from '../../utils/formatters';
@@ -39,10 +42,11 @@ const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [notificationsAnchorEl, setNotificationsAnchorEl] = useState(null);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,6 +54,14 @@ const Navigation = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleNotificationsOpen = (event) => {
+    setNotificationsAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationsClose = () => {
+    setNotificationsAnchorEl(null);
   };
 
   const handleDrawerToggle = () => {
@@ -69,7 +81,7 @@ const Navigation = () => {
   const getNavigationItems = () => {
     const items = [
       { text: 'Accueil', icon: <Home />, path: '/' },
-      { text: 'Clubs', icon: <Group />, path: '/clubs' },
+      { text: 'Clubs', icon: <ClubsIcon />, path: '/clubs' },
     ];
 
     if (!user) {
@@ -79,25 +91,25 @@ const Navigation = () => {
     switch (user.role) {
       case 'ETUDIANT':
         items.push(
-          { text: 'Créer un club', icon: <AddCircle />, path: '/clubs/create' }
+          { text: 'Créer un club', icon: <AddIcon />, path: '/clubs/create' }
         );
         break;
       case 'RESPONSABLE':
         items.push(
-          { text: 'Tableau de bord', icon: <Dashboard />, path: '/responsable/dashboard' },
-          { text: 'Demandes de clubs', icon: <AddCircle />, path: '/responsable/requests' }
+          { text: 'Tableau de bord', icon: <DashboardIcon />, path: '/responsable/dashboard' },
+          { text: 'Demandes', icon: <AddIcon />, path: '/responsable/requests' }
         );
         break;
       case 'COORDINATEUR':
         items.push(
-          { text: 'Tableau de bord', icon: <Dashboard />, path: '/coordinateur/dashboard' },
-          { text: 'Événements', icon: <Event />, path: '/coordinateur/events' },
-          { text: 'Membres', icon: <Group />, path: '/coordinateur/members' }
+          { text: 'Dashboard', icon: <DashboardIcon />, path: '/coordinateur/dashboard' },
+          { text: 'Événements', icon: <EventsIcon />, path: '/coordinateur/events' },
+          { text: 'Membres', icon: <ClubsIcon />, path: '/coordinateur/members' }
         );
         break;
       case 'MEMBRE':
         items.push(
-          { text: 'Événements', icon: <Event />, path: '/events' }
+          { text: 'Événements', icon: <EventsIcon />, path: '/events' }
         );
         break;
     }
@@ -108,7 +120,7 @@ const Navigation = () => {
   const navigationItems = getNavigationItems();
 
   const drawer = (
-    <Box>
+    <Box sx={{ pt: 1 }}>
       <List>
         {navigationItems.map((item) => (
           <ListItemButton
@@ -122,52 +134,27 @@ const Navigation = () => {
               borderRadius: 1,
               mx: 1,
               mb: 0.5,
-              position: 'relative',
               '&.Mui-selected': {
-                bgcolor: 'primary.light',
-                color: 'primary.main',
-                '&:hover': {
-                  bgcolor: 'primary.light',
-                },
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  left: 0,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: 4,
-                  height: '60%',
-                  bgcolor: 'primary.main',
-                  borderRadius: '0 4px 4px 0',
+                backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                color: theme.palette.primary.main,
+                '& .MuiListItemIcon-root': {
+                  color: theme.palette.primary.main,
                 },
               },
               '&:hover': {
-                bgcolor: 'action.hover',
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
             }}
           >
-            <ListItemIcon
-              sx={{
-                color: isActiveRoute(item.path) ? 'primary.main' : 'inherit',
-                minWidth: 40,
-              }}
-            >
+            <ListItemIcon sx={{ minWidth: 40 }}>
               {item.icon}
             </ListItemIcon>
             <ListItemText 
               primary={item.text}
               primaryTypographyProps={{
-                fontWeight: isActiveRoute(item.path) ? 'medium' : 'regular',
+                fontWeight: isActiveRoute(item.path) ? '600' : '400',
               }}
             />
-            {isActiveRoute(item.path) && (
-              <KeyboardArrowRightIcon 
-                sx={{ 
-                  color: 'primary.main',
-                  opacity: 0.8,
-                }} 
-              />
-            )}
           </ListItemButton>
         ))}
       </List>
@@ -179,13 +166,11 @@ const Navigation = () => {
       anchorEl={anchorEl}
       open={Boolean(anchorEl)}
       onClose={handleMenuClose}
-      keepMounted
-      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       PaperProps={{
         elevation: 3,
         sx: {
           mt: 1,
+          minWidth: 200,
           '& .MuiMenuItem-root': {
             py: 1,
             px: 2,
@@ -193,41 +178,106 @@ const Navigation = () => {
         },
       }}
     >
-      {user && (
-        <>
-          <MenuItem onClick={() => {
-            handleMenuClose();
-            navigate('/profile');
-          }}
-          sx={{
-            '&:hover': {
-              bgcolor: 'action.hover',
-              '& .MuiSvgIcon-root': {
-                color: 'primary.main',
-              },
-            },
-          }}
-          >
-            <Settings sx={{ mr: 2, color: 'action.active' }} />
-            Paramètres
-          </MenuItem>
-          <MenuItem 
-            onClick={handleLogout}
-            sx={{
-              color: 'error.main',
-              '&:hover': {
-                bgcolor: 'error.light',
-                '& .MuiSvgIcon-root': {
-                  color: 'error.main',
-                },
-              },
-            }}
-          >
-            <Logout sx={{ mr: 2, color: 'inherit' }} />
-            Déconnexion
-          </MenuItem>
-        </>
-      )}
+      <MenuItem 
+        onClick={() => {
+          handleMenuClose();
+          navigate('/profile');
+        }}
+        sx={{
+          '&:hover': {
+            backgroundColor: 'rgba(25, 118, 210, 0.08)',
+            color: theme.palette.primary.main,
+          },
+        }}
+      >
+        <ListItemIcon>
+          <AccountIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Mon Profil</ListItemText>
+      </MenuItem>
+      <MenuItem 
+        onClick={() => {
+          handleMenuClose();
+          navigate('/settings');
+        }}
+        sx={{
+          '&:hover': {
+            backgroundColor: 'rgba(25, 118, 210, 0.08)',
+            color: theme.palette.primary.main,
+          },
+        }}
+      >
+        <ListItemIcon>
+          <Settings fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Paramètres</ListItemText>
+      </MenuItem>
+      <Divider />
+      <MenuItem 
+        onClick={handleLogout}
+        sx={{
+          color: theme.palette.error.main,
+          '&:hover': {
+            backgroundColor: 'rgba(244, 67, 54, 0.08)',
+          },
+        }}
+      >
+        <ListItemIcon sx={{ color: 'inherit' }}>
+          <LogOut fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Déconnexion</ListItemText>
+      </MenuItem>
+    </Menu>
+  );
+
+  const renderNotificationsMenu = (
+    <Menu
+      anchorEl={notificationsAnchorEl}
+      open={Boolean(notificationsAnchorEl)}
+      onClose={handleNotificationsClose}
+      PaperProps={{
+        elevation: 3,
+        sx: {
+          mt: 1,
+          width: 320,
+          maxHeight: 400,
+          '& .MuiMenuItem-root': {
+            py: 1,
+            px: 2,
+          },
+        },
+      }}
+    >
+      <MenuItem dense sx={{ justifyContent: 'space-between' }}>
+        <Typography variant="subtitle1" fontWeight="600">
+          Notifications
+        </Typography>
+        <Chip label="3 nouvelles" size="small" color="primary" />
+      </MenuItem>
+      <Divider />
+      {/* Sample notifications */}
+      <MenuItem>
+        <ListItemText 
+          primary="Nouvel événement créé"
+          secondary="Il y a 2 heures"
+        />
+      </MenuItem>
+      <MenuItem>
+        <ListItemText 
+          primary="Votre demande a été approuvée"
+          secondary="Hier"
+        />
+      </MenuItem>
+      <MenuItem>
+        <ListItemText 
+          primary="Nouveau message dans le club"
+          secondary="2 jours"
+        />
+      </MenuItem>
+      <Divider />
+      <MenuItem sx={{ justifyContent: 'center' }}>
+        <Button size="small">Voir toutes les notifications</Button>
+      </MenuItem>
     </Menu>
   );
 
@@ -238,51 +288,73 @@ const Navigation = () => {
         elevation={0}
         sx={{
           bgcolor: 'background.paper',
-          borderBottom: 1,
-          borderColor: 'divider',
+          borderBottom: `1px solid ${theme.palette.divider}`,
+          backdropFilter: 'blur(8px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ px: { xs: 2, md: 3 } }}>
           <IconButton
             color="inherit"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ 
+              mr: 2, 
+              display: { md: 'none' },
+              transition: 'transform 0.2s',
+              '&:hover': {
+                transform: 'rotate(90deg)',
+              }
+            }}
           >
             <MenuIcon />
           </IconButton>
 
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ 
-              flexGrow: 1, 
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
               cursor: 'pointer',
-              color: 'primary.main',
-              fontWeight: 'bold',
+              transition: 'transform 0.2s',
               '&:hover': {
-                opacity: 0.8,
-              },
+                transform: 'translateY(-2px)',
+              }
             }}
             onClick={() => navigate('/')}
           >
-            SESAVENTY
-          </Typography>
+            <img src={logo} alt="Logo" style={{ height: 36, width: 36, marginRight: 8 }} />
+            <Typography
+              variant="h6"
+              sx={{ 
+                color: theme.palette.primary.main,
+                fontWeight: '700',
+                fontFamily: '"Roboto Condensed", sans-serif',
+                letterSpacing: '0.5px',
+              }}
+            >
+              SESAVENTY
+            </Typography>
+          </Box>
 
-          <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 1 }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, ml: 4, gap: 1 }}>
             {navigationItems.map((item) => (
               <Button
                 key={item.text}
                 startIcon={item.icon}
                 onClick={() => navigate(item.path)}
                 sx={{
-                  color: isActiveRoute(item.path) ? 'primary.main' : 'text.primary',
-                  bgcolor: isActiveRoute(item.path) ? 'primary.light' : 'transparent',
+                  color: isActiveRoute(item.path) 
+                    ? theme.palette.primary.main 
+                    : theme.palette.text.primary,
+                  fontWeight: isActiveRoute(item.path) ? '600' : '400',
                   px: 2,
                   py: 1,
                   borderRadius: 2,
+                  transition: 'all 0.2s',
                   '&:hover': {
-                    bgcolor: isActiveRoute(item.path) ? 'primary.light' : 'action.hover',
+                    bgcolor: 'action.hover',
+                    transform: 'translateY(-2px)',
                   },
                 }}
               >
@@ -291,37 +363,71 @@ const Navigation = () => {
             ))}
           </Box>
 
+          <Box sx={{ flexGrow: 1 }} />
+
           {user ? (
-            <Box sx={{ ml: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <IconButton
+                onClick={handleNotificationsOpen}
+                sx={{
+                  transition: 'transform 0.2s',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                  }
+                }}
+              >
+                <Badge badgeContent={3} color="primary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+
               <IconButton
                 onClick={handleProfileMenuOpen}
-                size="small"
-                sx={{ ml: 2 }}
+                sx={{
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                  }
+                }}
               >
-                <Avatar
-                  src={user.photo}
-                  alt={formatUserName(user)}
-                  sx={{ 
-                    width: 36, 
-                    height: 36,
-                    border: 2,
-                    borderColor: 'primary.main',
-                  }}
-                >
-                  {formatUserName(user).charAt(0)}
-                </Avatar>
+                {user.photo ? (
+                  <Avatar
+                    src={user.photo}
+                    alt={formatUserName(user)}
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      border: `2px solid ${theme.palette.primary.main}`,
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      bgcolor: theme.palette.primary.main,
+                      color: 'white',
+                      fontWeight: '600',
+                    }}
+                  >
+                    {formatUserName(user).charAt(0)}
+                  </Avatar>
+                )}
               </IconButton>
             </Box>
           ) : (
-            <Box sx={{ ml: 2 }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
               <Button
-                color="inherit"
+                variant="outlined"
                 onClick={() => navigate('/login')}
                 sx={{
-                  mr: 1,
+                  px: 3,
+                  borderRadius: 2,
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
                   '&:hover': {
-                    color: 'primary.main',
-                  },
+                    transform: 'translateY(-2px)',
+                  }
                 }}
               >
                 Connexion
@@ -332,10 +438,13 @@ const Navigation = () => {
                 sx={{
                   px: 3,
                   borderRadius: 2,
+                  fontWeight: '600',
+                  boxShadow: 'none',
+                  transition: 'all 0.2s',
                   '&:hover': {
                     transform: 'translateY(-2px)',
-                    boxShadow: (theme) => theme.shadows[4],
-                  },
+                    boxShadow: theme.shadows[2],
+                  }
                 }}
               >
                 Inscription
@@ -345,10 +454,7 @@ const Navigation = () => {
         </Toolbar>
       </AppBar>
 
-      <Box
-        component="nav"
-        sx={{ width: { sm: 240 }, flexShrink: { sm: 0 } }}
-      >
+      <Box component="nav">
         <Drawer
           variant={isMobile ? 'temporary' : 'permanent'}
           open={mobileOpen}
@@ -357,13 +463,12 @@ const Navigation = () => {
             keepMounted: true,
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': {
+              width: 280,
               boxSizing: 'border-box',
-              width: 240,
               mt: '64px',
-              borderRight: 1,
-              borderColor: 'divider',
+              borderRight: `1px solid ${theme.palette.divider}`,
             },
           }}
         >
@@ -372,6 +477,7 @@ const Navigation = () => {
       </Box>
 
       {renderProfileMenu}
+      {renderNotificationsMenu}
     </>
   );
 };

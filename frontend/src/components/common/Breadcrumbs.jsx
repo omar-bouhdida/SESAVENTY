@@ -2,20 +2,20 @@ import React from 'react';
 import { Box, Breadcrumbs as MuiBreadcrumbs, Typography, Link } from '@mui/material';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
-  NavigateNext as NavigateNextIcon,
+  ChevronRight as NavigateNextIcon,
   Home as HomeIcon,
-  Group as GroupIcon,
-  Event as EventIcon,
-  Dashboard as DashboardIcon,
+  Users as GroupIcon,
+  Calendar as EventIcon,
+  LayoutDashboard as DashboardIcon,
   Settings as SettingsIcon,
-} from '@mui/icons-material';
+} from 'lucide-react';
 
 const iconMap = {
-  home: <HomeIcon sx={{ mr: 0.5 }} fontSize="small" />,
-  clubs: <GroupIcon sx={{ mr: 0.5 }} fontSize="small" />,
-  events: <EventIcon sx={{ mr: 0.5 }} fontSize="small" />,
-  dashboard: <DashboardIcon sx={{ mr: 0.5 }} fontSize="small" />,
-  settings: <SettingsIcon sx={{ mr: 0.5 }} fontSize="small" />,
+  home: <HomeIcon size={18} style={{ marginRight: 4 }} />,
+  clubs: <GroupIcon size={18} style={{ marginRight: 4 }} />,
+  events: <EventIcon size={18} style={{ marginRight: 4 }} />,
+  dashboard: <DashboardIcon size={18} style={{ marginRight: 4 }} />,
+  settings: <SettingsIcon size={18} style={{ marginRight: 4 }} />,
 };
 
 const pathNameMap = {
@@ -61,7 +61,7 @@ const Breadcrumbs = () => {
       }}
     >
       <MuiBreadcrumbs
-        separator={<NavigateNextIcon fontSize="small" />}
+        separator={<NavigateNextIcon size={18} />}
         aria-label="breadcrumb"
       >
         <Link

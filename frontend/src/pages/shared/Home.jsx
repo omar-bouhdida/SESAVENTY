@@ -17,12 +17,42 @@ import {
   Event as EventIcon,
   ArrowForward as ArrowForwardIcon,
 } from '@mui/icons-material';
+import { useAnimation } from '../../hooks/useAnimation';
 import ClubCard from '../../components/common/ClubCard';
 import EventCard from '../../components/common/EventCard';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotification } from '../../contexts/NotificationContext';
 import clubService from '../../services/clubService';
 import eventService from '../../services/eventService';
+
+const StatBox = ({ number, label, delay = 0 }) => {
+  const animationRef = useAnimation('scale-up', delay);
+
+  return (
+    <Box sx={{ textAlign: 'center' }} ref={animationRef}>
+      <Typography 
+        variant="h3" 
+        color="primary" 
+        sx={{ 
+          fontWeight: 'bold',
+          mb: 1,
+          background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        }}
+      >
+        {number}
+      </Typography>
+      <Typography 
+        variant="subtitle1" 
+        color="text.secondary"
+        sx={{ fontWeight: 500 }}
+      >
+        {label}
+      </Typography>
+    </Box>
+  );
+};
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -31,6 +61,12 @@ const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { showNotification } = useNotification();
+  const theme = useTheme();
+
+  const heroTitleRef = useAnimation('slide-right');
+  const heroSubtitleRef = useAnimation('slide-right', 0.2);
+  const heroButtonsRef = useAnimation('fade-in', 0.4);
+  const heroImageRef = useAnimation('slide-up', 0.3);
 
   useEffect(() => {
     fetchData();
@@ -45,10 +81,7 @@ const Home = () => {
       setClubs(clubsData);
       setEvents(eventsData);
     } catch (error) {
-      showNotification(
-        'Erreur lors du chargement des données',
-        'error'
-      );
+      showNotification('Erreur lors du chargement des données', 'error');
     } finally {
       setLoading(false);
     }
@@ -64,8 +97,8 @@ const Home = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" my={4}>
-        <CircularProgress />
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+        <CircularProgress size={40} />
       </Box>
     );
   }
@@ -75,7 +108,7 @@ const Home = () => {
       {/* Hero Section */}
       <Box
         sx={{
-          background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.primary.light} 90%)`,
+          background: (theme) => `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
           color: 'primary.contrastText',
           pt: { xs: 8, md: 12 },
           pb: { xs: 10, md: 14 },
@@ -88,7 +121,7 @@ const Home = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: 'url(/images/pattern.svg)',
+            backgroundImage: 'url(/pattern.svg)',
             backgroundSize: 'cover',
             opacity: 0.1,
           }
@@ -97,29 +130,36 @@ const Home = () => {
         <Container maxWidth="lg">
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
-              <Typography 
-                variant="h2" 
-                component="h1" 
-                sx={{ 
-                  fontWeight: 'bold',
-                  mb: 2,
-                  fontSize: { xs: '2.5rem', md: '3.5rem' }
-                }}
-              >
-                SESAVENTY
-              </Typography>
-              <Typography 
-                variant="h5" 
-                sx={{ 
-                  mb: 4,
-                  fontWeight: 'light',
-                  lineHeight: 1.5
-                }}
-              >
-                Découvrez et rejoignez les clubs étudiants de l'ENSIAS. 
-                Participez à des événements enrichissants et développez vos compétences.
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              <Box ref={heroTitleRef}>
+                <Typography 
+                  variant="h1" 
+                  sx={{ 
+                    fontWeight: 'bold',
+                    mb: 2,
+                    fontSize: { xs: '2.5rem', md: '3.5rem' },
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  SESAVENTY
+                </Typography>
+              </Box>
+              
+              <Box ref={heroSubtitleRef}>
+                <Typography 
+                  variant="h5" 
+                  sx={{ 
+                    mb: 4,
+                    fontWeight: 'light',
+                    lineHeight: 1.5,
+                    opacity: 0.9,
+                  }}
+                >
+                  Découvrez et rejoignez les clubs étudiants de l'Université Sesame. 
+                  Participez à des événements enrichissants et développez vos compétences.
+                </Typography>
+              </Box>
+
+              <Box ref={heroButtonsRef} sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                 <Button
                   variant="contained"
                   size="large"
@@ -130,10 +170,12 @@ const Home = () => {
                     py: 1.5,
                     px: 4,
                     fontSize: '1.1rem',
-                    transition: 'transform 0.2s',
+                    borderRadius: 2,
+                    boxShadow: theme.shadows[4],
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     '&:hover': {
                       transform: 'translateY(-2px)',
-                      boxShadow: (theme) => theme.shadows[8],
+                      boxShadow: theme.shadows[8],
                     }
                   }}
                 >
@@ -149,10 +191,13 @@ const Home = () => {
                     py: 1.5,
                     px: 4,
                     fontSize: '1.1rem',
-                    borderColor: 'primary.contrastText',
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    borderRadius: 2,
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     '&:hover': {
                       borderColor: 'primary.contrastText',
                       bgcolor: 'rgba(255, 255, 255, 0.1)',
+                      transform: 'translateX(4px)',
                     }
                   }}
                 >
@@ -160,8 +205,10 @@ const Home = () => {
                 </Button>
               </Box>
             </Grid>
+
             <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'block' } }}>
               <Box
+                ref={heroImageRef}
                 component="img"
                 src="/images/hero-illustration.svg"
                 alt="Club activities illustration"
@@ -169,16 +216,9 @@ const Home = () => {
                   width: '100%',
                   maxWidth: 500,
                   height: 'auto',
-                  animation: 'float 6s ease-in-out infinite',
-                  '@keyframes float': {
-                    '0%, 100%': {
-                      transform: 'translateY(0)',
-                    },
-                    '50%': {
-                      transform: 'translateY(-20px)',
-                    },
-                  },
+                  filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.1))',
                 }}
+                className="animate-float"
               />
             </Grid>
           </Grid>
@@ -190,89 +230,49 @@ const Home = () => {
         <Paper
           elevation={3}
           sx={{
-            p: 3,
-            mb: 6,
+            p: 4,
+            mb: 8,
             display: 'flex',
             flexWrap: 'wrap',
             gap: 4,
             justifyContent: 'space-around',
             bgcolor: 'background.paper',
-            borderRadius: 2,
+            borderRadius: 3,
+            boxShadow: theme.shadows[3],
+            transition: 'transform 0.3s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: theme.shadows[6],
+            }
           }}
         >
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h4" color="primary" fontWeight="bold">
-              {clubs.length}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              Clubs Actifs
-            </Typography>
-          </Box>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h4" color="primary" fontWeight="bold">
-              {events.length}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              Événements
-            </Typography>
-          </Box>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h4" color="primary" fontWeight="bold">
-              {clubs.reduce((acc, club) => acc + (club.nombreMembres || 0), 0)}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              Membres
-            </Typography>
-          </Box>
+          <StatBox number={clubs.length} label="Clubs Actifs" delay={0} />
+          <StatBox number={events.length} label="Événements" delay={0.2} />
+          <StatBox 
+            number={clubs.reduce((acc, club) => acc + (club.nombreMembres || 0), 0)} 
+            label="Membres" 
+            delay={0.4}
+          />
         </Paper>
 
         {/* Clubs Section */}
         <Box mb={8}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={4}
-          >
-            <Box display="flex" alignItems="center" gap={2}>
-              <GroupsIcon color="primary" sx={{ fontSize: 32 }} />
-              <Typography variant="h4" fontWeight="bold">
-                Clubs populaires
-              </Typography>
-            </Box>
-            <Button 
-              onClick={() => navigate('/clubs')}
-              endIcon={<ArrowForwardIcon />}
-              sx={{
-                '&:hover': {
-                  transform: 'translateX(4px)',
-                  transition: 'transform 0.2s',
-                }
-              }}
-            >
-              Voir tous les clubs
-            </Button>
-          </Box>
+          <SectionHeader 
+            icon={<GroupsIcon sx={{ fontSize: 32 }} />}
+            title="Clubs populaires"
+            buttonText="Voir tous les clubs"
+            onButtonClick={() => navigate('/clubs')}
+          />
+          
           <Grid container spacing={3}>
-            {clubs.slice(0, 6).map((club) => (
+            {clubs.slice(0, 6).map((club, index) => (
               <Grid item xs={12} sm={6} md={4} key={club.id}>
-                <ClubCard club={club} />
+                <Box sx={{ opacity: 0 }} ref={useAnimation('slide-up', index * 0.1)}>
+                  <ClubCard club={club} />
+                </Box>
               </Grid>
             ))}
-            {clubs.length === 0 && (
-              <Box 
-                sx={{ 
-                  width: '100%', 
-                  textAlign: 'center', 
-                  py: 8,
-                  color: 'text.secondary'
-                }}
-              >
-                <Typography variant="h6">
-                  Aucun club disponible pour le moment
-                </Typography>
-              </Box>
-            )}
+            {clubs.length === 0 && <EmptyState text="Aucun club disponible pour le moment" />}
           </Grid>
         </Box>
 
@@ -280,56 +280,75 @@ const Home = () => {
 
         {/* Events Section */}
         <Box mb={8}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={4}
-          >
-            <Box display="flex" alignItems="center" gap={2}>
-              <EventIcon color="primary" sx={{ fontSize: 32 }} />
-              <Typography variant="h4" fontWeight="bold">
-                Événements à venir
-              </Typography>
-            </Box>
-            <Button 
-              onClick={() => navigate('/events')}
-              endIcon={<ArrowForwardIcon />}
-              sx={{
-                '&:hover': {
-                  transform: 'translateX(4px)',
-                  transition: 'transform 0.2s',
-                }
-              }}
-            >
-              Voir tous les événements
-            </Button>
-          </Box>
+          <SectionHeader 
+            icon={<EventIcon sx={{ fontSize: 32 }} />}
+            title="Événements à venir"
+            buttonText="Voir tous les événements"
+            onButtonClick={() => navigate('/events')}
+          />
+
           <Grid container spacing={3}>
-            {events.map((event) => (
+            {events.map((event, index) => (
               <Grid item xs={12} sm={6} md={4} key={event.id}>
-                <EventCard event={event} />
+                <Box sx={{ opacity: 0 }} ref={useAnimation('slide-up', index * 0.1)}>
+                  <EventCard event={event} />
+                </Box>
               </Grid>
             ))}
-            {events.length === 0 && (
-              <Box 
-                sx={{ 
-                  width: '100%', 
-                  textAlign: 'center', 
-                  py: 8,
-                  color: 'text.secondary'
-                }}
-              >
-                <Typography variant="h6">
-                  Aucun événement prévu pour le moment
-                </Typography>
-              </Box>
-            )}
+            {events.length === 0 && <EmptyState text="Aucun événement prévu pour le moment" />}
           </Grid>
         </Box>
       </Container>
     </Box>
   );
 };
+
+const SectionHeader = ({ icon, title, buttonText, onButtonClick }) => {
+  const headerRef = useAnimation('slide-right');
+  
+  return (
+    <Box
+      ref={headerRef}
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      mb={4}
+    >
+      <Box display="flex" alignItems="center" gap={2}>
+        {React.cloneElement(icon, { color: "primary" })}
+        <Typography variant="h4" fontWeight="bold">
+          {title}
+        </Typography>
+      </Box>
+      <Button 
+        onClick={onButtonClick}
+        endIcon={<ArrowForwardIcon />}
+        sx={{
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          '&:hover': {
+            transform: 'translateX(4px)',
+          }
+        }}
+      >
+        {buttonText}
+      </Button>
+    </Box>
+  );
+};
+
+const EmptyState = ({ text }) => (
+  <Box 
+    sx={{ 
+      width: '100%', 
+      textAlign: 'center', 
+      py: 8,
+      color: 'text.secondary'
+    }}
+  >
+    <Typography variant="h6">
+      {text}
+    </Typography>
+  </Box>
+);
 
 export default Home;
