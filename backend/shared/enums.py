@@ -31,5 +31,11 @@ class MembershipStatus(models.TextChoices):
 
 class MembershipRole(models.TextChoices):
     MEMBER = 'member', 'Member'
-    TREASURER = 'treasurer', 'Treasurer'
-    SECRETARY = 'secretary', 'Secretary'
+    TREASURY = "treasury", "Treasury"
+    SECRETARY = "secretary", "Secretary"
+    VICE_PRESIDENT = "vice_president", "Vice President"
+    COMMUNICATION_MANAGER = "communication_manager", "Communication Manager"
+    MEDIA_MANAGER = "media_manager", "Media Manager"
+    HR_MANAGER = "hr_manager", "HR Manager"
+    SPONSOR_MANAGER = "sponsor_manager", "Sponsorship Manager"
+    DESIGNER = "designer", "Graphic Designer"

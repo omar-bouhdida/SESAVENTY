@@ -22,7 +22,7 @@ class Membership(models.Model):
         default=MembershipStatus.PENDING
     )
     role = models.CharField(
-        max_length=20,
+        max_length=100,
         choices=MembershipRole.choices,
         default=MembershipRole.MEMBER
     )
