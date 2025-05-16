@@ -31,5 +31,18 @@ class Event(models.Model):
         related_name='created_events'
     )
 
-    def __str__(self):
+    class Meta:
+        verbose_name = 'Event'
+        verbose_name_plural = 'Events'
+        ordering = ['-start_time']
+
+    def __str__(self) -> str:
         return self.title
+
+    def is_upcoming(self) -> bool:
+        from django.utils import timezone
+        return self.start_time > timezone.now()
+
+    def is_past(self) -> bool:
+        from django.utils import timezone
+        return self.end_time < timezone.now()

@@ -29,6 +29,12 @@ class Membership(models.Model):
 
     class Meta:
         unique_together = ('user', 'club')
+        verbose_name = 'Membership'
+        verbose_name_plural = 'Memberships'
+        ordering = ['joined_at']
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user.username} in {self.club.name}"
+
+    def is_admin(self) -> bool:
+        return self.role in {MembershipRole.PRESIDENT, MembershipRole.VICE_PRESIDENT}

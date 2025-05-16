@@ -4,4 +4,5 @@ from .models import Membership
 class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
-        fields = '__all__'
+        fields = ['id', 'user', 'club', 'role', 'status', 'joined_at']
+        read_only_fields = ['id', 'joined_at']
