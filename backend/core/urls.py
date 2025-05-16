@@ -13,7 +13,7 @@ router.register(r'memberships', MembershipViewSet)
 router.register(r'events', EventViewSet)
 
 urlpatterns = [
-    path('/admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('auth/register/member/', MemberRegisterView.as_view(), name='register-member'),
     path('auth/register/coordinator/', CoordinatorRegisterView.as_view(), name='register-coordinator'),
     path('auth/register/rva/', RVARegisterView.as_view(), name='register-rva'),
