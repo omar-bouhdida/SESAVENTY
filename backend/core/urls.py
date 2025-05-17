@@ -1,22 +1,38 @@
-"""
-URL configuration for core project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+# core/urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from django.contrib import admin
-from django.urls import path
+
+from users.views import (
+    MemberRegisterView, CoordinatorRegisterView, RVARegisterView,
+    LoginView, MeView, CoordinatorsListView, MembersListView, RVAsListView
+)
+from clubs.views import ClubViewSet, ClubCreationRequestViewSet
+from memberships.views import MembershipViewSet
+from events.views import EventViewSet
+
+router = DefaultRouter()
+router.register(r'clubs', ClubViewSet)
+router.register(r'clubs/requests', ClubCreationRequestViewSet, basename='clubrequest')
+router.register(r'memberships', MembershipViewSet)
+router.register(r'events', EventViewSet)
 
 urlpatterns = [
+    # Admin
     path('admin/', admin.site.urls),
+
+    # Authentication & Registration
+    path('auth/register/member/', MemberRegisterView.as_view(), name='register-member'),
+    path('auth/register/coordinator/', CoordinatorRegisterView.as_view(), name='register-coordinator'),
+    path('auth/register/rva/', RVARegisterView.as_view(), name='register-rva'),
+    path('auth/login/', LoginView.as_view(), name='login'),
+    path('auth/me/', MeView.as_view(), name='me'),
+
+    # User lists by role
+    path('users/coordinators/', CoordinatorsListView.as_view(), name='coordinators-list'),
+    path('users/members/', MembersListView.as_view(), name='members-list'),
+    path('users/rvas/', RVAsListView.as_view(), name='rvas-list'),
+
+    # API router for clubs, memberships, events
+    path('api/', include(router.urls)),
 ]
