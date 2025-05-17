@@ -20,7 +20,7 @@ import {
 import { useAnimation } from '../../hooks/useAnimation';
 import ClubCard from '../../components/common/ClubCard';
 import EventCard from '../../components/common/EventCard';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 import { useNotification } from '../../contexts/NotificationContext';
 import clubService from '../../services/clubService';
 import eventService from '../../services/eventService';

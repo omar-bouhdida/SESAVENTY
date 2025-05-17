@@ -17,7 +17,7 @@ import {
   AccountCircle,
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 import { formatUserName } from '../../utils/formatters';
 
 const Header = () => {

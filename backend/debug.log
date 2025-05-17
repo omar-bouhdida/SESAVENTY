@@ -1,0 +1,215 @@
+[2025-05-17 17:23:57,260] INFO [autoreload:668] Watching for file changes with StatReloader
+[2025-05-17 17:24:28,533] INFO [autoreload:668] Watching for file changes with StatReloader
+[2025-05-17 17:24:29,870] DEBUG [utils:131] (0.006) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:24:29,873] DEBUG [utils:131] (0.001) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:25:18,066] INFO [basehttp:212] "OPTIONS /api/v1/auth/register/member HTTP/1.1" 200 0
+[2025-05-17 17:25:18,121] ERROR [log:241] Internal Server Error: /api/v1/auth/register/member
+Traceback (most recent call last):
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/v1/auth/register/member/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[2025-05-17 17:25:18,122] ERROR [basehttp:212] "POST /api/v1/auth/register/member HTTP/1.1" 500 75095
+[2025-05-17 17:25:35,288] INFO [autoreload:668] Watching for file changes with StatReloader
+[2025-05-17 17:25:35,411] DEBUG [utils:131] (0.008) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:25:35,417] DEBUG [utils:131] (0.005) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:25:39,717] ERROR [log:241] Internal Server Error: /api/v1/auth/register/member
+Traceback (most recent call last):
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/v1/auth/register/member/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[2025-05-17 17:25:39,718] ERROR [basehttp:212] "POST /api/v1/auth/register/member HTTP/1.1" 500 75103
+[2025-05-17 17:26:24,104] WARNING [log:241] Method Not Allowed: /api/v1/token/
+[2025-05-17 17:26:24,106] WARNING [basehttp:212] "GET /api/v1/token/ HTTP/1.1" 405 40
+[2025-05-17 17:32:23,085] INFO [autoreload:266] /Users/omar/Desktop/SESAVENTY/backend/core/settings.py changed, reloading.
+[2025-05-17 17:32:23,322] INFO [autoreload:266] /Users/omar/Desktop/SESAVENTY/backend/core/settings.py changed, reloading.
+[2025-05-17 17:32:23,721] INFO [autoreload:668] Watching for file changes with StatReloader
+[2025-05-17 17:32:23,760] INFO [autoreload:668] Watching for file changes with StatReloader
+[2025-05-17 17:32:23,878] DEBUG [utils:131] (0.007) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:32:23,878] DEBUG [utils:131] (0.007) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:32:23,881] DEBUG [utils:131] (0.001) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:32:23,881] DEBUG [utils:131] (0.001) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:33:12,284] INFO [autoreload:668] Watching for file changes with StatReloader
+[2025-05-17 17:33:12,435] DEBUG [utils:131] (0.012) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:33:12,438] DEBUG [utils:131] (0.001) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:33:54,914] INFO [autoreload:668] Watching for file changes with StatReloader
+[2025-05-17 17:33:55,090] DEBUG [utils:131] (0.017) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:33:55,093] DEBUG [utils:131] (0.001) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:34:03,207] ERROR [log:241] Internal Server Error: /api/v1/auth/register/member
+Traceback (most recent call last):
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/omar/Desktop/SESAVENTY/backend/venv/lib/python3.13/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/v1/auth/register/member/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[2025-05-17 17:34:03,209] ERROR [basehttp:212] "POST /api/v1/auth/register/member HTTP/1.1" 500 75095
+[2025-05-17 17:35:26,694] INFO [views:22] Received registration request: {'username': 'testuser123', 'email': 'test@example.com', 'password': 'Test@123', 'first_name': 'Test', 'last_name': 'User'}
+[2025-05-17 17:35:26,744] DEBUG [utils:131] (0.003) SELECT 1 AS "a" FROM "users_customuser" WHERE "users_customuser"."username" = 'testuser123' LIMIT 1; args=(1, 'testuser123'); alias=default
+[2025-05-17 17:35:26,866] DEBUG [utils:131] (0.003) INSERT INTO "users_customuser" ("password", "last_login", "is_superuser", "username", "first_name", "last_name", "email", "is_staff", "is_active", "date_joined", "role", "profile_picture") VALUES ('pbkdf2_sha256$600000$2a6l0XTa4xMbIbCiaSu2aD$Nafgmj35ZhHMLDc16Ag62T/8Kh7ECrGmxfdkTplZz+s=', NULL, false, 'testuser123', 'Test', 'User', 'test@example.com', false, true, '2025-05-17T17:35:26.778199+00:00'::timestamptz, 'member', '') RETURNING "users_customuser"."id"; args=('pbkdf2_sha256$600000$2a6l0XTa4xMbIbCiaSu2aD$Nafgmj35ZhHMLDc16Ag62T/8Kh7ECrGmxfdkTplZz+s=', None, False, 'testuser123', 'Test', 'User', 'test@example.com', False, True, datetime.datetime(2025, 5, 17, 17, 35, 26, 778199, tzinfo=datetime.timezone.utc), Role.MEMBER, ''); alias=default
+[2025-05-17 17:35:26,869] INFO [views:35] User registered successfully: testuser123
+[2025-05-17 17:35:26,877] INFO [views:48] Registration completed for testuser123 with token generation
+[2025-05-17 17:35:26,893] INFO [basehttp:212] "POST /api/v1/auth/register/member/ HTTP/1.1" 201 661
+[2025-05-17 17:35:36,907] DEBUG [utils:131] (0.002) SELECT "users_customuser"."id", "users_customuser"."password", "users_customuser"."last_login", "users_customuser"."is_superuser", "users_customuser"."username", "users_customuser"."first_name", "users_customuser"."last_name", "users_customuser"."email", "users_customuser"."is_staff", "users_customuser"."is_active", "users_customuser"."date_joined", "users_customuser"."role", "users_customuser"."profile_picture" FROM "users_customuser" WHERE "users_customuser"."id" = 3 LIMIT 21; args=(3,); alias=default
+[2025-05-17 17:35:36,917] INFO [basehttp:212] "GET /api/v1/auth/me/ HTTP/1.1" 200 115
+[2025-05-17 17:36:02,050] INFO [autoreload:266] /Users/omar/Desktop/SESAVENTY/backend/users/views.py changed, reloading.
+[2025-05-17 17:36:02,542] INFO [autoreload:668] Watching for file changes with StatReloader
+[2025-05-17 17:36:02,673] DEBUG [utils:131] (0.008) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:36:02,676] DEBUG [utils:131] (0.001) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:37:10,144] INFO [autoreload:667] Watching for file changes with StatReloader
+[2025-05-17 17:37:10,434] DEBUG [utils:151] (0.005) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:37:10,436] DEBUG [utils:151] (0.001) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:44:30,028] INFO [autoreload:265] /Users/omar/Desktop/SESAVENTY/backend/core/settings.py changed, reloading.
+[2025-05-17 17:44:30,666] INFO [autoreload:667] Watching for file changes with StatReloader
+[2025-05-17 17:44:30,968] DEBUG [utils:151] (0.012) 
+            SELECT
+                c.relname,
+                CASE
+                    WHEN c.relispartition THEN 'p'
+                    WHEN c.relkind IN ('m', 'v') THEN 'v'
+                    ELSE 't'
+                END,
+                obj_description(c.oid, 'pg_class')
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('f', 'm', 'p', 'r', 'v')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid)
+        ; args=None; alias=default
+[2025-05-17 17:44:30,969] DEBUG [utils:151] (0.001) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+[2025-05-17 17:44:35,090] INFO [autoreload:265] /Users/omar/Desktop/SESAVENTY/backend/core/settings.py changed, reloading.

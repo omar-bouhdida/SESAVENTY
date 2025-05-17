@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthProvider';
 import { ClubProvider } from './contexts/ClubContext';
 import { EventProvider } from './contexts/EventContext';
 import { NotificationProvider } from './contexts/NotificationContext';

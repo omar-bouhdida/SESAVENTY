@@ -13,7 +13,7 @@ import {
   Link as MuiLink,
 } from '@mui/material';
 import { Eye, EyeOff, ArrowLeft, ArrowRight, Diamond } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 import { validateEmail } from '../../utils/validators';
 
 const Register = () => {
@@ -26,6 +26,7 @@ const Register = () => {
     firstName: '',
     lastName: '',
     email: '',
+    username: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false,
@@ -37,6 +38,12 @@ const Register = () => {
     
     if (!formData.firstName) newErrors.firstName = 'First name is required';
     if (!formData.lastName) newErrors.lastName = 'Last name is required';
+    
+    if (!formData.username) {
+      newErrors.username = 'Username is required';
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters';
+    }
     
     if (!formData.email) {
       newErrors.email = 'Email is required';
@@ -81,13 +88,88 @@ const Register = () => {
 
     try {
       setLoading(true);
-      await register(formData);
+      // Create the registration data in the format expected by the backend
+      const registrationData = {
+        username: formData.username,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+      };
+      
+      console.log('Submitting registration with data:', {...registrationData, password: '***REDACTED***'});
+      
+      await register(registrationData);
+      console.log('Registration successful, navigating to dashboard');
       navigate('/dashboard');
     } catch (err) {
-      setErrors(prev => ({
-        ...prev,
-        submit: err.response?.data?.message || 'Registration failed'
-      }));
+      console.error('Registration error:', err);
+      
+      // Extract error message from different possible response formats
+      let errorMessage = 'Registration failed';
+      let fieldErrors = {};
+      
+      if (err.response) {
+        if (err.response.data) {
+          if (err.response.data.message) {
+            errorMessage = err.response.data.message;
+          } else if (err.response.data.detail) {
+            errorMessage = err.response.data.detail;
+          } else if (err.response.data.errors) {
+            // Format validation errors nicely
+            const validationErrors = err.response.data.errors;
+            errorMessage = 'Validation errors: ';
+            
+            // Map backend field errors to form field names
+            for (const field in validationErrors) {
+              if (Object.prototype.hasOwnProperty.call(validationErrors, field)) {
+                const errorMsg = validationErrors[field];
+                errorMessage += `${field} - ${errorMsg}; `;
+                
+                // Map django field names to frontend field names
+                switch(field) {
+                  case 'username': 
+                    fieldErrors.username = errorMsg;
+                    break;
+                  case 'first_name':
+                    fieldErrors.firstName = errorMsg;
+                    break;
+                  case 'last_name':
+                    fieldErrors.lastName = errorMsg;
+                    break;
+                  case 'email':
+                    fieldErrors.email = errorMsg;
+                    break;
+                  case 'password':
+                    fieldErrors.password = errorMsg;
+                    break;
+                  default:
+                    // Keep other errors for the submit error message
+                    break;
+                }
+              }
+            }
+          }
+        } else {
+          errorMessage = `Server error: ${err.response.status}`;
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      // Update field-specific errors
+      if (Object.keys(fieldErrors).length > 0) {
+        setErrors(prev => ({
+          ...prev,
+          ...fieldErrors,
+          submit: 'Please correct the errors in the form.'
+        }));
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          submit: errorMessage
+        }));
+      }
     } finally {
       setLoading(false);
     }
@@ -153,7 +235,7 @@ const Register = () => {
       }}>
         <Box sx={{ maxWidth: 480, width: '100%', mx: 'auto' }}>
           <Typography variant="h3" component="h1" sx={{ mb: 6, fontWeight: 'bold', textAlign: 'center' }}>
-          Registrez-vous
+          S'inscrire
           </Typography>
 
           {errors.submit && (
@@ -162,9 +244,17 @@ const Register = () => {
               p: 2, 
               backgroundColor: '#fdeded', 
               color: '#d32f2f',
-              borderRadius: 1
+              borderRadius: 1,
+              border: '1px solid #ef9a9a'
             }}>
-              <Typography variant="body2">{errors.submit}</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                {errors.submit}
+              </Typography>
+              {errors.submit.includes('Validation errors') && (
+                <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>
+                  Please check all fields and try again.
+                </Typography>
+              )}
             </Box>
           )}
 
@@ -227,6 +317,36 @@ const Register = () => {
                 }}
               />
             </Box>
+
+            <TextField
+              required
+              fullWidth
+              name="username"
+              placeholder="Nom d'utilisateur"
+              value={formData.username}
+              onChange={handleChange}
+              variant="outlined"
+              error={!!errors.username}
+              helperText={errors.username}
+              sx={{ 
+                mb: 3,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 4,
+                  backgroundColor: '#fff',
+                  height: 56,
+                  '& fieldset': {
+                    borderColor: '#e0e0e6',
+                    borderWidth: '2px',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#6347FF',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#6347FF',
+                  },
+                }
+              }}
+            />
 
             <TextField
               required
@@ -344,6 +464,34 @@ const Register = () => {
                 ),
               }}
             />
+            
+            <FormControlLabel
+              control={
+                <Checkbox 
+                  name="agreeTerms"
+                  checked={formData.agreeTerms}
+                  onChange={handleChange}
+                  sx={{
+                    color: '#6347FF',
+                    '&.Mui-checked': {
+                      color: '#6347FF',
+                    }
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2">
+                  J'accepte les <MuiLink href="/terms" color="primary">conditions d'utilisation</MuiLink> et la <MuiLink href="/privacy" color="primary">politique de confidentialité</MuiLink>
+                </Typography>
+              }
+              sx={{ mb: 3 }}
+            />
+            {errors.agreeTerms && (
+              <Typography color="error" variant="caption" sx={{ mt: -2, mb: 2, display: 'block' }}>
+                {errors.agreeTerms}
+              </Typography>
+            )}
+            
             <button
               type="submit"
               disabled={loading}
@@ -365,7 +513,7 @@ const Register = () => {
                 opacity: loading ? 0.7 : 1,
               }}
             >
-              {loading ? 'Création de compte...' : 'Registre'} <ArrowRight size={20} />
+              {loading ? 'Création de compte...' : "S'inscrire"} <ArrowRight size={20} />
             </button>
 
             <Box sx={{ textAlign: 'center', my: 3 }}>

@@ -15,7 +15,7 @@ import {
   Input,
 } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 import { useNotification } from '../../contexts/NotificationContext';
 import useForm from '../../hooks/useForm';
 import { validateImageFile } from '../../utils/validators';

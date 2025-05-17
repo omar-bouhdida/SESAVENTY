@@ -4,7 +4,7 @@ import { useLocation, Outlet } from 'react-router-dom';
 import Navigation from '../components/common/Navigation';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import Footer from '../components/common/Footer';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthProvider';
 
 const MainLayout = () => {
   const { user } = useAuth();

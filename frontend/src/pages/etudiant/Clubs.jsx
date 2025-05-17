@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import ClubCard from '../../components/common/ClubCard';
 import { useClub } from '../../contexts/ClubContext';
 import { useNotification } from '../../contexts/NotificationContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 
 const Clubs = () => {
   const [loading, setLoading] = useState(true);

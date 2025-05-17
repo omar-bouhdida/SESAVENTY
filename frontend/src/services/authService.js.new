@@ -1,0 +1,219 @@
+import axios from 'axios';
+import { API_ENDPOINTS } from '../utils/constants';
+import { storeAuthData, clearAuthData, getAuthData } from '../utils/authHelpers';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+const DEBUG = import.meta.env.VITE_DEBUG === 'true';
+
+// Create a basic axios instance for auth operations (to avoid circular dependency)
+const authApi = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Add better error logging for debugging
+authApi.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (DEBUG) {
+      console.error('Auth API Error:', {
+        config: error.config,
+        response: error.response?.data,
+        status: error.response?.status,
+        message: error.message,
+      });
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Debug API configuration
+if (DEBUG) {
+  console.log('Auth Service initialized with:', {
+    API_BASE_URL,
+    API_ENDPOINTS: API_ENDPOINTS.AUTH,
+  });
+}
+
+const TOKEN_STORAGE = {
+  ACCESS: 'access_token',
+  REFRESH: 'refresh_token',
+  USER: 'user_data',
+};
+
+const authService = {
+  async login(credentials) {
+    try {
+      // Use the token endpoint instead of the legacy login
+      const response = await authApi.post(API_ENDPOINTS.AUTH.TOKEN, credentials);
+      
+      if (response.data.access && response.data.refresh) {
+        storeAuthData(response.data);
+        
+        // Get user data with the new token
+        if (!response.data.user) {
+          await this.fetchUserData();
+        }
+      }
+      
+      return response.data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
+  },
+
+  async register(userData, role = 'MEMBER') {
+    try {
+      let endpoint;
+      
+      switch (role.toUpperCase()) {
+        case 'COORDINATOR':
+          endpoint = API_ENDPOINTS.AUTH.REGISTER.COORDINATOR;
+          break;
+        case 'RVA':
+          endpoint = API_ENDPOINTS.AUTH.REGISTER.RVA;
+          break;
+        default:
+          endpoint = API_ENDPOINTS.AUTH.REGISTER.MEMBER;
+      }
+      
+      if (DEBUG) {
+        console.log('Registering user with data:', {...userData, password: '***REDACTED***'});
+        console.log('Using endpoint:', `${API_BASE_URL}${endpoint}`);
+      }
+      
+      // Include debug information in request headers
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Client-Version': '1.0.0',
+          'X-Debug-Mode': DEBUG ? 'true' : 'false'
+        },
+        // Enable better error handling
+        validateStatus: status => status < 500,
+      };
+      
+      const response = await authApi.post(endpoint, userData, config);
+      
+      if (DEBUG) {
+        console.log('Registration response:', response);
+      }
+      
+      // Check for error status codes
+      if (response.status >= 400) {
+        throw {
+          response: response,
+          message: 'Registration failed',
+        };
+      }
+      
+      // Store auth data from response using our helper
+      const stored = storeAuthData(response.data);
+      
+      // If no tokens in response, try to auto-login
+      if (!stored || (!response.data.access && !response.data.token)) {
+        console.log('No tokens in registration response, attempting auto-login');
+        try {
+          const loginData = {
+            username: userData.username,
+            password: userData.password
+          };
+          if (DEBUG) {
+            console.log('Auto-login after registration with:', {...loginData, password: '***REDACTED***'});
+          }
+          await this.login(loginData);
+        } catch (loginError) {
+          console.error('Auto-login after registration failed:', loginError);
+          throw new Error('Registration succeeded but auto-login failed. Please try logging in manually.');
+        }
+      }
+      
+      return response.data;
+    } catch (error) {
+      console.error('Registration error details:', error);
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+      throw error;
+    }
+  },
+
+  async fetchUserData() {
+    try {
+      // Create a temporary axios instance for this request
+      const tempApi = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.getAccessToken()}`
+        }
+      });
+      
+      const response = await tempApi.get(API_ENDPOINTS.AUTH.PROFILE);
+      localStorage.setItem(TOKEN_STORAGE.USER, JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      throw error;
+    }
+  },
+
+  async logout() {
+    // We don't need to call the server for JWT-based logout
+    // Just remove the tokens from local storage
+    clearAuthData();
+  },
+
+  async updateProfile(userData) {
+    // Create a temporary axios instance for this request
+    const tempApi = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.getAccessToken()}`
+      }
+    });
+    
+    const response = await tempApi.put(API_ENDPOINTS.AUTH.PROFILE, userData);
+    localStorage.setItem(TOKEN_STORAGE.USER, JSON.stringify(response.data));
+    return response.data;
+  },
+
+  saveTokens(accessToken, refreshToken) {
+    localStorage.setItem(TOKEN_STORAGE.ACCESS, accessToken);
+    localStorage.setItem(TOKEN_STORAGE.REFRESH, refreshToken);
+  },
+
+  getAccessToken() {
+    return localStorage.getItem(TOKEN_STORAGE.ACCESS);
+  },
+
+  getRefreshToken() {
+    return localStorage.getItem(TOKEN_STORAGE.REFRESH);
+  },
+
+  getUser() {
+    const user = localStorage.getItem(TOKEN_STORAGE.USER);
+    return user ? JSON.parse(user) : null;
+  },
+
+  isAuthenticated() {
+    return !!this.getAccessToken();
+  },
+
+  hasRole(role) {
+    const user = this.getUser();
+    return user?.role === role;
+  },
+};
+
+export default authService;

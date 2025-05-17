@@ -34,7 +34,7 @@ import {
   User as AccountIcon,
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 import { formatUserName } from '../../utils/formatters';
 
 const Navigation = () => {

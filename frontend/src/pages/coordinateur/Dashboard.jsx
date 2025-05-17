@@ -18,7 +18,7 @@ import {
   Add as AddIcon,
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 import { useNotification } from '../../contexts/NotificationContext';
 import clubService from '../../services/clubService';
 import requestService from '../../services/requestService';

@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import EventsList from '../../components/membre/EventsList';
 import { useNotification } from '../../contexts/NotificationContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 import eventService from '../../services/eventService';
 import memberService from '../../services/memberService';
 

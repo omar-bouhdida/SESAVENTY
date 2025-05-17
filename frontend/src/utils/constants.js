@@ -30,23 +30,29 @@ export const NOTIFICATION_TYPES = {
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: '/auth/login',
-    REGISTER: '/auth/register',
+    REGISTER: {
+      MEMBER: '/auth/register/member',
+      COORDINATOR: '/auth/register/coordinator',
+      RVA: '/auth/register/rva',
+    },
     LOGOUT: '/auth/logout',
-    PROFILE: '/auth/profile',
+    PROFILE: '/auth/me',
+    TOKEN: '/token',
+    TOKEN_REFRESH: '/token/refresh',
+    TOKEN_VERIFY: '/token/verify',
   },
   CLUBS: {
     BASE: '/clubs',
-    REQUESTS: '/clubs/demandes-creation',
-    MEMBERS: '/clubs/membres',
-    ADHESIONS: '/clubs/demandes-adhesion',
+    REQUESTS: '/clubs/requests',
+    MEMBERS: '/memberships',
   },
   EVENTS: {
-    BASE: '/evenements',
-    PARTICIPANTS: '/evenements/participants',
+    BASE: '/events',
   },
   USERS: {
-    BASE: '/utilisateurs',
-    PROFILE: '/utilisateurs/profile',
+    COORDINATORS: '/users/coordinators',
+    MEMBERS: '/users/members',
+    RVAS: '/users/rvas',
   },
 };
 

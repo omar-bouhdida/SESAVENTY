@@ -13,7 +13,7 @@ import {
   Link as MuiLink,
 } from '@mui/material';
 import { Eye, EyeOff, ArrowLeft, ArrowRight, Diamond } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthProvider';
 
 const Login = () => {
   const navigate = useNavigate();
