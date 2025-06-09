@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/omar-bouhdida/SESAVENTY/issues"
   },
-  "homepage": "https://github.com/omar-bouhdida/SESAVENTY#readme"
+  "homepage": "https://github.com/omar-bouhdida/SESAVENTY#readme",
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
 }

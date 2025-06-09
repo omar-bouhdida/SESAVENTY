@@ -28,7 +28,12 @@ class LoginView(APIView):
         password = request.data.get('password')
         user = authenticate(request, username=username, password=password)
         if user:
-            return Response(UserSerializer(user).data)
+            from rest_framework.authtoken.models import Token
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({
+                'token': token.key,
+                'user': UserSerializer(user).data
+            })
         return Response({'detail': 'Invalid credentials'}, status=400)
 
 class MeView(APIView):
